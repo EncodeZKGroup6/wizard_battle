@@ -1,4 +1,5 @@
 import { Field, Struct, ZkProgram } from 'o1js';
+import { WizardState } from '../types';
 
 export class ApplyPublicInput extends Struct({
   actions: Field,
@@ -14,10 +15,7 @@ export class ApplyPublicOutput extends Struct({
 */
 const proveApply = (
   publicInput: ApplyPublicInput,
-  spell1: Field,
-  spell2: Field,
-  posX: Field,
-  posY: Field
+  state: WizardState
 ): ApplyPublicOutput => {
   return new ApplyPublicOutput({
     health: Field.from(0),
@@ -31,7 +29,7 @@ export const ApplyProgramm = ZkProgram({
 
   methods: {
     proveApply: {
-      privateInputs: [Field, Field, Field, Field],
+      privateInputs: [WizardState],
       method: proveApply,
     },
   },

@@ -1,4 +1,5 @@
 import { Field, Struct, ZkProgram } from 'o1js';
+import { WizardState } from '../types';
 
 export class CommitPublicInput extends Struct({
   state: Field,
@@ -17,11 +18,7 @@ export class CommitPublicOutput extends Struct({
 */
 const proveCommit = (
   publicInput: CommitPublicInput,
-  spell1: Field,
-  spell2: Field,
-  posX: Field,
-  posY: Field,
-  stateSalt: Field,
+  state: WizardState,
   action: Field,
   actionSalt: Field
 ): CommitPublicOutput => {
@@ -37,7 +34,7 @@ export const CommitProgramm = ZkProgram({
 
   methods: {
     proveCommit: {
-      privateInputs: [Field, Field, Field, Field, Field, Field, Field],
+      privateInputs: [WizardState, Field, Field],
       method: proveCommit,
     },
   },

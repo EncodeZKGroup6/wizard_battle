@@ -1,4 +1,5 @@
 import { Field, Struct, ZkProgram } from 'o1js';
+import { WizardState } from '../types';
 
 export class StatePublicInput extends Struct({
   index: Field,
@@ -16,11 +17,7 @@ export class StatePublicOutput extends Struct({
 */
 const proveState = (
   publicInput: StatePublicInput,
-  spell1: Field,
-  spell2: Field,
-  posx: Field,
-  posY: Field,
-  salt: Field
+  state: WizardState
 ): StatePublicOutput => {
   return new StatePublicOutput({
     state: Field.from(0),
@@ -34,7 +31,7 @@ export const StateProgramm = ZkProgram({
 
   methods: {
     proveState: {
-      privateInputs: [Field, Field, Field, Field, Field],
+      privateInputs: [WizardState],
       method: proveState,
     },
   },
