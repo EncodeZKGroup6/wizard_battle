@@ -11,6 +11,9 @@ import {
   MerkleMapWitness,
 } from 'o1js';
 import { transaction } from 'o1js/dist/node/lib/mina';
+import { ProofOfState } from './proofs/ProofOfState';
+import { ProofOfCommit } from './proofs/ProofOfCommit';
+import { ProofOfApply } from './proofs/ProofOfApply';
 
 const GameStatus = {
   init: Field.from(0),
@@ -88,7 +91,7 @@ export class WizardBattle extends SmartContract {
   //     this.('player'+numberPlayer+'ID').set(joinerId);
 
   //     // Emit event for successfully joining a Battleships game
-  //     this.emitEvent("Player Joined: A new player has joined the hosted game!", joinerId);
+  //     this.emitEvent("Playeimport { Field, Field, Field } from 'o1js/dist/node/lib/field';r Joined: A new player has joined the hosted game!", joinerId);
   // }
 
   /*
