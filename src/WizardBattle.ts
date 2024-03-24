@@ -14,6 +14,7 @@ import { transaction } from 'o1js/dist/node/lib/mina';
 import { ProofOfState } from './proofs/ProofOfState';
 import { ProofOfCommit } from './proofs/ProofOfCommit';
 import { ProofOfApply } from './proofs/ProofOfApply';
+import { Field } from 'o1js/dist/node/lib/field';
 
 const GameStatus = {
   init: Field.from(0),
@@ -204,7 +205,7 @@ export class WizardBattle extends SmartContract {
     let alive = this.alive.getAndRequireEquals();
     // If new health equals 0, tham
     let newAlive = Provable.if(
-      newPlayerHealth.equals(UInt64.zero),
+      newPlayerHealth.equals(Field.from(0)),
       alive.sub(Field.from(1)),
       alive
     );
@@ -273,6 +274,11 @@ export class WizardBattle extends SmartContract {
     action: Field,
     actionWitness: MerkleMapWitness
   ) {
+    throw new Error('Method not implemented.');
+  }
+
+  // Set user health in health valrable. Health is sotred as [health1, health2, health3, health4]
+  updateHealth(playerIndex: Field, newPlayerHealth: Field) {
     throw new Error('Method not implemented.');
   }
 }
