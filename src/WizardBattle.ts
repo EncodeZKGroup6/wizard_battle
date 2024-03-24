@@ -14,7 +14,6 @@ import { transaction } from 'o1js/dist/node/lib/mina';
 import { ProofOfState } from './proofs/ProofOfState';
 import { ProofOfCommit } from './proofs/ProofOfCommit';
 import { ProofOfApply } from './proofs/ProofOfApply';
-import { Field } from 'o1js/dist/node/lib/field';
 
 const GameStatus = {
   init: Field.from(0),
