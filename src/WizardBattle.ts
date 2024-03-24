@@ -145,7 +145,7 @@ export class WizardBattle extends SmartContract {
     this.updateCommit(
       playerIndex,
       Field(0),
-      commitWitness.publicOutput.commit, // Commit is action + salt
+      commitProof.publicOutput.commit, // Commit is action + salt
       commitWitness
     );
 
