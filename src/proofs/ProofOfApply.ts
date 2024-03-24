@@ -1,11 +1,27 @@
-import { Struct, ZkProgram } from 'o1js';
+import { Field, Struct, ZkProgram } from 'o1js';
 
-export class ApplyPublicInput extends Struct({}) {}
+export class ApplyPublicInput extends Struct({
+  actions: Field,
+  state: Field,
+}) {}
 
-export class ApplyPublicOutput extends Struct({}) {}
+export class ApplyPublicOutput extends Struct({
+  health: Field,
+}) {}
 
-const proveApply = (publicInput: ApplyPublicInput): ApplyPublicOutput => {
-  return new ApplyPublicOutput({});
+/*
+    This one should apply all spells from actions and return final health of wizard
+*/
+const proveApply = (
+  publicInput: ApplyPublicInput,
+  spell1: Field,
+  spell2: Field,
+  posX: Field,
+  posY: Field
+): ApplyPublicOutput => {
+  return new ApplyPublicOutput({
+    health: Field.from(0),
+  });
 };
 
 export const ApplyProgramm = ZkProgram({
@@ -15,7 +31,7 @@ export const ApplyProgramm = ZkProgram({
 
   methods: {
     proveApply: {
-      privateInputs: [],
+      privateInputs: [Field, Field, Field, Field],
       method: proveApply,
     },
   },
