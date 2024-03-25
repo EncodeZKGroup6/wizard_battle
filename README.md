@@ -24,14 +24,14 @@ Wizzard battle is a ZK game that was created during Encode ZK Bootcamp project b
 
 We are using Mina, so we are seriously limited with space we have.
 
-1. Merkle root of user public keys (hashed)
-2. Stage
-3. Player1 Status. Players statuses also can be stored as merkle tree, if needed. This will free 3 more slots.
-4. Player2 Status
-5. Player3 Status
-6. Player4 Status
-7. Game data. Number of alive wizards, number of actions left, current actions - all packed into single field
-8.
+1. Merkle map root of players, so we can check both user and their index
+2. Status. One of GameStatus options
+3. Merkle map of players state. Player state is private data of each player. Indexes are the same as in players merkle map.
+4. Merkle map of commits
+5. Merkle map of actions
+6. Health info of all users packed into single Field
+7. Number of alive players
+8. Number of player that is still didn't make a move in this phaze
 
 ## Proofs
 
