@@ -48,6 +48,7 @@ export class WizardBattle extends SmartContract {
     State<UInt64>(); /* Is this a cooldown for the spells or is the game turnbased? in which case we shpuld add it to the GameStatus and: @state(UInt8) turnCount = State<UInt8>();*/
 
   @method setup(playersRoot: Field) {
+    // Here can be additional check, that root is right
     const curStatus = this.status.getAndRequireEquals();
     curStatus.assertEquals(GameStatus.init);
     this.players.set(playersRoot);

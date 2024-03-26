@@ -27,7 +27,7 @@ const proveCommit = (
   });
 };
 
-export const CommitProgramm = ZkProgram({
+export const CommitProgram = ZkProgram({
   name: 'state-proof',
   publicInput: CommitPublicInput,
   publicOutput: CommitPublicOutput,
@@ -40,4 +40,4 @@ export const CommitProgramm = ZkProgram({
   },
 });
 
-export class ProofOfCommit extends ZkProgram.Proof(CommitProgramm) {}
+export class ProofOfCommit extends ZkProgram.Proof(CommitProgram) {}

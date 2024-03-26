@@ -22,7 +22,7 @@ const proveApply = (
   });
 };
 
-export const ApplyProgramm = ZkProgram({
+export const ApplyProgram = ZkProgram({
   name: 'state-proof',
   publicInput: ApplyPublicInput,
   publicOutput: ApplyPublicOutput,
@@ -35,4 +35,4 @@ export const ApplyProgramm = ZkProgram({
   },
 });
 
-export class ProofOfApply extends ZkProgram.Proof(ApplyProgramm) {}
+export class ProofOfApply extends ZkProgram.Proof(ApplyProgram) {}

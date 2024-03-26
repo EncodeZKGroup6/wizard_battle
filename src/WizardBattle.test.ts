@@ -5,11 +5,14 @@ import {
   PublicKey,
   AccountUpdate,
   UInt64,
+  MerkleMap,
+  Poseidon,
 } from 'o1js';
 import { WizardBattle } from './WizardBattle';
-import { ApplyProgramm, ProofOfApply } from './proofs/ProofOfApply';
-import { StateProgramm } from './proofs/ProofOfState';
-import { CommitProgramm } from './proofs/ProofOfCommit';
+import { ApplyProgram, ProofOfApply } from './proofs/ProofOfApply';
+import { StateProgram, StatePublicInput } from './proofs/ProofOfState';
+import { CommitProgram } from './proofs/ProofOfCommit';
+import { WizardState } from './types';
 
 /*
  * This file specifies how to test the `Add` example smart contract. It is safe to delete this file and replace
@@ -20,9 +23,14 @@ import { CommitProgramm } from './proofs/ProofOfCommit';
 
 let proofsEnabled = false;
 
-interface Player {
+class Player {
   publicKey: PublicKey;
   privateKey: PrivateKey;
+  index: Field;
+
+  hash() {
+    return Poseidon.hash(this.publicKey.toFields());
+  }
 }
 
 describe('BatchMessageProcessor', () => {
@@ -36,9 +44,9 @@ describe('BatchMessageProcessor', () => {
   beforeAll(async () => {
     let startTime = Date.now();
     if (proofsEnabled) {
-      StateProgramm.compile();
-      ApplyProgramm.compile();
-      CommitProgramm.compile();
+      StateProgram.compile();
+      ApplyProgram.compile();
+      CommitProgram.compile();
     }
   });
 
@@ -47,7 +55,9 @@ describe('BatchMessageProcessor', () => {
     Mina.setActiveInstance(Local);
     ({ privateKey: deployerKey, publicKey: deployerAccount } =
       Local.testAccounts[0]);
-    players = Local.testAccounts.slice(1, 5);
+    players = Local.testAccounts.slice(1, 5).map((account, i) => {
+      return { ...account, index: Field.from(i) } as Player;
+    });
     zkAppPrivateKey = PrivateKey.random();
     zkAppAddress = zkAppPrivateKey.toPublicKey();
     zkApp = new WizardBattle(zkAppAddress);
@@ -65,5 +75,43 @@ describe('BatchMessageProcessor', () => {
 
   it('One big correct game', async () => {
     await localDeploy();
+    // Set players
+    let playersMerkleMap = new MerkleMap();
+    let statesMerkleMap = new MerkleMap();
+    for (const player of players) {
+      playersMerkleMap.set(player.index, player.hash());
+    }
+
+    let tx = await Mina.transaction(players[0].publicKey, () => {
+      zkApp.setup(playersMerkleMap.getRoot());
+    });
+
+    await tx.prove();
+    await tx.sign([players[0].privateKey]).send();
+
+    // Set players states
+    for (const player of players) {
+      const state = WizardState.random();
+      const publicInput = new StatePublicInput({
+        index: player.index,
+      });
+      const proofOfState = await StateProgram.proveState(publicInput, state);
+      statesMerkleMap.set(player.index, state.hash());
+      tx = await Mina.transaction(player.publicKey, () => {
+        zkApp.setPlayerState(
+          proofOfState,
+          player.index,
+          playersMerkleMap.getWitness(player.index),
+          statesMerkleMap.getWitness(player.index)
+        );
+      });
+
+      await tx.prove();
+      await tx.sign([player.privateKey]).send();
+    }
+
+    // N rounds of commit, reveal, apply
+
+    // Check winners
   });
 });

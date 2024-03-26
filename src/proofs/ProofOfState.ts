@@ -24,7 +24,7 @@ const proveState = (
   });
 };
 
-export const StateProgramm = ZkProgram({
+export const StateProgram = ZkProgram({
   name: 'state-proof',
   publicInput: StatePublicInput,
   publicOutput: StatePublicOutput,
@@ -37,4 +37,4 @@ export const StateProgramm = ZkProgram({
   },
 });
 
-export class ProofOfState extends ZkProgram.Proof(StateProgramm) {}
+export class ProofOfState extends ZkProgram.Proof(StateProgram) {}
