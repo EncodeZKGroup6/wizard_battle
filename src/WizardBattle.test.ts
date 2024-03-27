@@ -15,10 +15,7 @@ import { CommitProgram } from './proofs/ProofOfCommit';
 import { WizardState } from './types';
 
 /*
- * This file specifies how to test the `Add` example smart contract. It is safe to delete this file and replace
- * with your own tests.
- *
- * See https://docs.minaprotocol.com/zkapps for more info.
+ * This file specifies how to test the `WizardBattle` smart contract
  */
 
 let proofsEnabled = false;

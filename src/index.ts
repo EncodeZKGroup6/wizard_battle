@@ -1,3 +1,3 @@
-import { Add } from './Add.js';
+import { WizardBattle } from './WizardBattle.js';
 
-export { Add };
+export { WizardBattle };
