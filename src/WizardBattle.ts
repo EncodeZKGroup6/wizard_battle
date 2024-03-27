@@ -271,8 +271,14 @@ export class WizardBattle extends SmartContract {
 
   // this function should check if value indeed in merkle map
   checkCommit(key: Field, value: Field, commitWitness: MerkleMapWitness) {
-    throw new Error('Method not implemented.');
-  }
+    let [root, computedKey] = commitWitness.computeRootAndKey(value);
+        computedKey.assertEquals(key);
+    let storedValue = commitWitness.getValue(key);
+    value.assertEquals(storedValue);
+    let rootOnContract = this.playerCommits.getAndRequireEquals();
+    root.assertEquals(rootOnContract);
+}
+
 
   // Should work the same as updateCommit but for actions
   updateAction(
