@@ -252,13 +252,21 @@ export class WizardBattle extends SmartContract {
   }
 
   // This function should works exxactly the same as updateState, but with different contract value
-  updateCommit(
+    updateCommit(
     playerIndex: Field,
     prevCommit: Field,
-    commit: any,
+    commit: Field,
     commitWitness: MerkleMapWitness
   ) {
-    throw new Error('Method not implemented.');
+    // Compute merkle map root with provided values
+    let [root, key] = commitWitness.computeRootAndKey(prevCommit);
+    // Check that calculated root is exactly the same as on contract
+    root.assertEquals(this.playerCommits.getAndRequireEquals());
+    // Check that key is the same, that we are trying to update
+    key.assertEquals(playerIndex);
+    // Caclulate new root with new values
+    let [newRootValue, _] = commitWitness.computeRootAndKey(commit);
+    this.playerStates.set(newRootValue);
   }
 
   // this function should check if value indeed in merkle map
@@ -280,4 +288,7 @@ export class WizardBattle extends SmartContract {
   updateHealth(playerIndex: Field, newPlayerHealth: Field) {
     throw new Error('Method not implemented.');
   }
+
+
+  
 }
